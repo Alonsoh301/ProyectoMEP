@@ -1,0 +1,64 @@
+﻿@model List<ProyectoMEP.Entidades.Servicio>
+
+<div class="container-fluid content-header">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Servicios</h3>
+
+                    <div style="text-align:right">
+                        <a class="btn btn-primary" href="@Url.Action("RegistrarServicio", "Servicio")"> + Registrar </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>                               
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.IdServicio</td>
+                                    <td>@item.Nombre</td>
+                                    <td>@item.Precio</td>  
+                                    @if (item.Estado)
+                                    {
+                                        <td>Activo</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Inactivo</td>
+                                    }
+
+                                    <td style="text-align:center">
+                                        <a href="@Url.Action("ActualizarServicio","Servicio", new { id = item.IdServicio})">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("EliminarServicio","Servicio", new { id = item.IdServicio})">
+                                            <i class="fa fa-trash-o fa-lg"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

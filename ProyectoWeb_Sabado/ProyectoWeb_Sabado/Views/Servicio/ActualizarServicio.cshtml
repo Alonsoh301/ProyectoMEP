@@ -1,0 +1,90 @@
+﻿@model ProyectoMEP.Entidades.Servicio
+
+<div class="container-fluid content-header">
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+            <br />
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title" style="text-align:center; font-size:large">Actualizar Servicio</h3>
+                </div>
+
+                @using (Html.BeginForm("ActualizarServicio", "Servicio", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                {
+                    <input asp-for="IdServicio" type="hidden" readonly="readonly" required />
+
+                    <div class="card-body">
+                        <label>Nombre</label>
+                        <input asp-for="Nombre" class="form-control" type="text" placeholder="Nombre" readonly="readonly" required />
+                        <br>
+
+                        <label>Precio</label>
+                        <input asp-for="Precio" id="Precio" class="form-control" type="text" placeholder="Precio" required
+                               onkeypress="return ValidarNumeros(this.id)" onpaste="return false;" />
+                        <br>                       
+
+                        <label>Video</label>
+                        <div class="row">
+                            <div class="col-7">
+                                <input asp-for="Video" class="form-control" type="text" placeholder="Video" required />
+                            </div>
+                            <div class="col-5" style="text-align:center">
+                                <iframe src="@ViewBag.urlVideo" style="width:150px; height:150px;"></iframe>
+                            </div>
+                        </div>
+                        <br>
+
+                        <label>Imagen</label>
+                        <div class="row">
+                            <div class="col-7">
+                                <input accept="image/png" id="Imagen" name="Imagen" class="form-control" type="file">
+                            </div>
+                            <div class="col-5" style="text-align:center">
+                                <img src="@ViewBag.urlImagen" style="width:150px; height:150px;">
+                            </div>
+                        </div>
+                        <br>
+
+                        @if (ViewBag.MsjPantalla != null)
+                        {
+                            <div class="alert alert-warning" role="alert" style="text-align:center">
+                                @ViewBag.MsjPantalla
+                            </div>
+                        }
+
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Procesar</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function ValidarNumeros(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+        else if (charCode == 46) {
+            var txt = document.getElementById(evt).value;
+            if (!(txt.indexOf(".") > -1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+</script>
