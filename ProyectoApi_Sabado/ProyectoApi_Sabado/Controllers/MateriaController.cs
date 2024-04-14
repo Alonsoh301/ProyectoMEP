@@ -9,25 +9,25 @@ namespace ProyectoApi_Sabado.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicioController(IConfiguration _configuration) : ControllerBase
+    public class MateriaController(IConfiguration _configuration) : ControllerBase
     {
         [Authorize]
         [HttpGet]
-        [Route("ConsultarServicios")]
-        public IActionResult ConsultarServicios(bool MostrarTodos)
+        [Route("ConsultarMaterias")]
+        public IActionResult ConsultarMaterias(bool MostrarTodos)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 ServicioRespuesta respuesta = new ServicioRespuesta();
 
-                var resultado = db.Query<Servicio>("ConsultarServicios",
+                var resultado = db.Query<Materia>("ConsultarMaterias",
                     new { MostrarTodos },
                     commandType: CommandType.StoredProcedure).ToList();
 
                 if (resultado == null)
                 {
                     respuesta.Codigo = "-1";
-                    respuesta.Mensaje = "No hay servicios registrados";
+                    respuesta.Mensaje = "No hay materias registrados";
                 }
                 else
                 {
@@ -40,21 +40,21 @@ namespace ProyectoApi_Sabado.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("ConsultarServicio")]
-        public IActionResult ConsultarServicio(long IdServicio)
+        [Route("ConsultarMateria")]
+        public IActionResult ConsultarMateria(long IdServicio)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 ServicioRespuesta respuesta = new ServicioRespuesta();
 
-                var resultado = db.Query<Servicio>("ConsultarServicio",
+                var resultado = db.Query<Materia>("ConsultarMateria",
                     new { IdServicio },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
                 if (resultado == null)
                 {
                     respuesta.Codigo = "-1";
-                    respuesta.Mensaje = "No hay servicios registrados";
+                    respuesta.Mensaje = "No hay materias registradas";
                 }
                 else
                 {
@@ -67,21 +67,21 @@ namespace ProyectoApi_Sabado.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("RegistrarServicio")]
-        public IActionResult RegistrarServicio(Servicio entidad)
+        [Route("RegistrarMateria")]
+        public IActionResult RegistrarServicio(Materia entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 Respuesta respuesta = new Respuesta();
 
-                var resultado = db.Query<Servicio>("RegistrarServicio",
+                var resultado = db.Query<Materia>("RegistrarMateria",
                     new { entidad.Nombre, entidad.Precio, entidad.Imagen, entidad.Video },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
                 if (resultado == null)
                 {
                     respuesta.Codigo = "-1";
-                    respuesta.Mensaje = "Este servicio ya se encuentra registrado";
+                    respuesta.Mensaje = "Esta materia  ya se encuentra registrada";
                 }
                 else
                 {
@@ -95,21 +95,21 @@ namespace ProyectoApi_Sabado.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("ActualizarServicio")]
-        public IActionResult ActualizarServicio(Servicio entidad)
+        [Route("ActualizarMateria")]
+        public IActionResult ActualizarServicio(Materia entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 Respuesta respuesta = new Respuesta();
 
-                var resultado = db.Execute("ActualizarServicio",
+                var resultado = db.Execute("ActualizarMateria",
                     new { entidad.IdServicio, entidad.Precio, entidad.Video },
                     commandType: CommandType.StoredProcedure);
 
                 if (resultado <= 0)
                 {
                     respuesta.Codigo = "-1";
-                    respuesta.Mensaje = "No se pudo actualizar este servicio";
+                    respuesta.Mensaje = "No se pudo actualizar esta materia";
                 }
 
                 return Ok(respuesta);
