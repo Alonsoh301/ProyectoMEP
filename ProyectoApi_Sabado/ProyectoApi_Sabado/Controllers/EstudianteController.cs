@@ -11,19 +11,19 @@ namespace ProyectoApi_Sabado.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuarioController(IConfiguration _configuration, IUtilitariosModel _utilitariosModel,
+    public class EstudianteController(IConfiguration _configuration, IUtilitariosModel _utilitariosModel,
                                    IHostEnvironment _hostEnvironment) : ControllerBase
     {
         [AllowAnonymous]
         [HttpPost]
         [Route("IniciarSesion")]
-        public IActionResult IniciarSesion(Usuario entidad)
+        public IActionResult IniciarSesion(Estudiante entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 UsuarioRespuesta respuesta = new UsuarioRespuesta();
 
-                var resultado = db.Query<Usuario>("IniciarSesion",
+                var resultado = db.Query<Estudiante>("IniciarSesion",
                     new { entidad.Correo, entidad.Contrasenna },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
@@ -45,7 +45,7 @@ namespace ProyectoApi_Sabado.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("RegistrarUsuario")]
-        public IActionResult RegistrarUsuario(Usuario entidad)
+        public IActionResult RegistrarUsuario(Estudiante entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -69,7 +69,7 @@ namespace ProyectoApi_Sabado.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("RecuperarAcceso")]
-        public IActionResult RecuperarAcceso(Usuario entidad)
+        public IActionResult RecuperarAcceso(Estudiante entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -79,7 +79,7 @@ namespace ProyectoApi_Sabado.Controllers
                 string Contrasenna = _utilitariosModel.Encrypt(NuevaContrasenna);
                 bool EsTemporal = true;
 
-                var resultado = db.Query<Usuario>("RecuperarAcceso",
+                var resultado = db.Query<Estudiante>("RecuperarAcceso",
                     new { entidad.Correo, Contrasenna, EsTemporal },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
@@ -106,14 +106,14 @@ namespace ProyectoApi_Sabado.Controllers
         [AllowAnonymous]
         [HttpPut]
         [Route("CambiarContrasenna")]
-        public IActionResult CambiarContrasenna(Usuario entidad)
+        public IActionResult CambiarContrasenna(Estudiante entidad)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 UsuarioRespuesta respuesta = new UsuarioRespuesta();
                 bool EsTemporal = false;
 
-                var resultado = db.Query<Usuario>("CambiarContrasenna",
+                var resultado = db.Query<Estudiante>("CambiarContrasenna",
                     new { entidad.Correo, entidad.Contrasenna, entidad.ContrasennaTemporal, EsTemporal },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 

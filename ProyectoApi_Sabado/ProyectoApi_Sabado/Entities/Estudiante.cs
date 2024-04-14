@@ -1,11 +1,11 @@
 ﻿namespace ProyectoApi_Sabado.Entidades
 {
-    public class Usuario
+    public class Estudiante
     {
-        public long IdUsuario { get; set; }
+        public long IdEstudiante { get; set; }
         public string? Correo { get; set; }
         public string? Contrasenna { get; set; }
-        public string? NombreUsuario { get; set; }
+        public string? NombreEstudiante { get; set; }
         public short IdRol { get; set; }
         public string? NombreRol { get; set; }
         public bool Estado { get; set; }
@@ -15,10 +15,9 @@
         public short IdCategoria { get; set; }
         public string? NombreCategoria { get; set; }
     }
-
-    public class UsuarioRespuesta
+    public class EstudianteRespuesta
     {
-        public UsuarioRespuesta()
+        public EstudianteRespuesta()
         {
             Codigo = "00";
             Mensaje = string.Empty;
@@ -26,7 +25,7 @@
 
         public string? Codigo { get; set; }
         public string? Mensaje { get; set; }
-        public Usuario? Dato { get; set; }
-        public List<Usuario>? Datos { get; set; }
+        public Estudiante? Dato { get; set; }
+        public List<Estudiante>? Datos { get; set; }
     }
 }
