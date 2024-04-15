@@ -18,7 +18,7 @@ namespace ProyectoApi_Sabado.Controllers
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                ServicioRespuesta respuesta = new ServicioRespuesta();
+                MateriaRespuesta respuesta = new MateriaRespuesta();
 
                 var resultado = db.Query<Materia>("ConsultarMaterias",
                     new { MostrarTodos },
@@ -27,7 +27,7 @@ namespace ProyectoApi_Sabado.Controllers
                 if (resultado == null)
                 {
                     respuesta.Codigo = "-1";
-                    respuesta.Mensaje = "No hay materias registrados";
+                    respuesta.Mensaje = "No hay materias registradas";
                 }
                 else
                 {
@@ -41,14 +41,14 @@ namespace ProyectoApi_Sabado.Controllers
         [Authorize]
         [HttpGet]
         [Route("ConsultarMateria")]
-        public IActionResult ConsultarMateria(long IdServicio)
+        public IActionResult ConsultarMateria(long IdMateria)
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                ServicioRespuesta respuesta = new ServicioRespuesta();
+              MateriaRespuesta respuesta = new MateriaRespuesta();
 
                 var resultado = db.Query<Materia>("ConsultarMateria",
-                    new { IdServicio },
+                    new { IdMateria  },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
                 if (resultado == null)
@@ -75,7 +75,7 @@ namespace ProyectoApi_Sabado.Controllers
                 Respuesta respuesta = new Respuesta();
 
                 var resultado = db.Query<Materia>("RegistrarMateria",
-                    new { entidad.Nombre, entidad.Precio, entidad.Imagen, entidad.Video },
+                    new { entidad.Nombre, entidad.Precio, entidad.Imagen, entidad.Descripcion },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
 
                 if (resultado == null)
@@ -85,7 +85,7 @@ namespace ProyectoApi_Sabado.Controllers
                 }
                 else
                 {
-                    respuesta.ConsecutivoGenerado = resultado.IdServicio;
+                    respuesta.ConsecutivoGenerado = resultado.IdMateria;
                 }
 
                 return Ok(respuesta);
@@ -103,13 +103,36 @@ namespace ProyectoApi_Sabado.Controllers
                 Respuesta respuesta = new Respuesta();
 
                 var resultado = db.Execute("ActualizarMateria",
-                    new { entidad.IdServicio, entidad.Precio, entidad.Video },
+                    new { entidad.IdMateria, entidad.Precio, entidad.Imagen },
                     commandType: CommandType.StoredProcedure);
 
                 if (resultado <= 0)
                 {
                     respuesta.Codigo = "-1";
                     respuesta.Mensaje = "No se pudo actualizar esta materia";
+                }
+
+                return Ok(respuesta);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("EliminarMateria")]
+        public IActionResult EliminarServicio(long IdMateria)
+        {
+            using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                Respuesta respuesta = new Respuesta();
+
+                var resultado = db.Execute("EliminarMateria",
+                    new { IdMateria },
+                    commandType: CommandType.StoredProcedure);
+
+                if (resultado <= 0)
+                {
+                    respuesta.Codigo = "-1";
+                    respuesta.Mensaje = "No se pudo eliminar esta materia";
                 }
 
                 return Ok(respuesta);

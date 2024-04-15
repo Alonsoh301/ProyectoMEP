@@ -5,6 +5,7 @@
         string GenerarToken(string correo);
         string GenerarNuevaContrasenna();
         string Encrypt(string texto);
+        string Decrypt (string texto);
         void EnviarCorreo(string Destinatario, string Asunto, string Mensaje);
     }
 }

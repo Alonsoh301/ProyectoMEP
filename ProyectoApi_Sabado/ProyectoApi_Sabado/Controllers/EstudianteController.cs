@@ -21,7 +21,7 @@ namespace ProyectoApi_Sabado.Controllers
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                UsuarioRespuesta respuesta = new UsuarioRespuesta();
+                EstudianteRespuesta respuesta = new EstudianteRespuesta();
 
                 var resultado = db.Query<Estudiante>("IniciarSesion",
                     new { entidad.Correo, entidad.Contrasenna },
@@ -52,7 +52,7 @@ namespace ProyectoApi_Sabado.Controllers
                 Respuesta respuesta = new Respuesta();
 
                 var resultado = db.Execute("RegistrarUsuario",
-                    new { entidad.Correo, entidad.Contrasenna, entidad.NombreUsuario },
+                    new { entidad.Correo, entidad.Contrasenna, entidad.NombreEstudiante },
                     commandType: CommandType.StoredProcedure);
 
                 if (resultado <= 0)
@@ -73,7 +73,7 @@ namespace ProyectoApi_Sabado.Controllers
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                UsuarioRespuesta respuesta = new UsuarioRespuesta();
+                EstudianteRespuesta respuesta = new EstudianteRespuesta();
 
                 string NuevaContrasenna = _utilitariosModel.GenerarNuevaContrasenna();
                 string Contrasenna = _utilitariosModel.Encrypt(NuevaContrasenna);
@@ -92,7 +92,7 @@ namespace ProyectoApi_Sabado.Controllers
                 {
                     string ruta = Path.Combine(_hostEnvironment.ContentRootPath, "Password.html");
                     string htmlBody = System.IO.File.ReadAllText(ruta);
-                    htmlBody = htmlBody.Replace("@Usuario@", resultado.NombreUsuario);
+                    htmlBody = htmlBody.Replace("@Usuario@", resultado.NombreEstudiante);
                     htmlBody = htmlBody.Replace("@Contrasenna@", NuevaContrasenna);
 
                     _utilitariosModel.EnviarCorreo(resultado.Correo!, "Nueva Contraseña!!", htmlBody);
@@ -110,7 +110,7 @@ namespace ProyectoApi_Sabado.Controllers
         {
             using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                UsuarioRespuesta respuesta = new UsuarioRespuesta();
+                EstudianteRespuesta respuesta = new EstudianteRespuesta();
                 bool EsTemporal = false;
 
                 var resultado = db.Query<Estudiante>("CambiarContrasenna",
@@ -130,6 +130,42 @@ namespace ProyectoApi_Sabado.Controllers
                 return Ok(respuesta);
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("ConsultarEstudiante")]
+        public IActionResult ConsultarEstudiante()
+        {
+            using (var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+            MateriaRespuesta respuesta = new MateriaRespuesta();
+
+                long IdEstudiante = long.Parse(_utilitariosModel.Decrypt(User.Identity!.Name!));
+
+                var resultado = db.Query<Materia>("ConsultarEstudiante",
+                    new { IdEstudiante },
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+                if (resultado == null)
+                {
+                    respuesta.Codigo = "-1";
+                    respuesta.Mensaje = "No se encontró su información";
+                }
+                else
+                {
+                    respuesta.Dato = resultado;
+                }
+
+                return Ok(respuesta);
+            }
+        }
+
+
+
+
+
+
+
 
     }
 }
