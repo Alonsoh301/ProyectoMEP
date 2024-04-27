@@ -25,17 +25,10 @@ namespace ProyectoMEP.Controllers
             if (resp?.Codigo == "00")
             {
                 HttpContext.Session.SetString("Correo", resp?.Dato?.Correo!);
-                HttpContext.Session.SetString("Nombre", resp?.Dato?.NombreEstudiante!);
-                HttpContext.Session.SetString("Categoria", resp?.Dato?.NombreCategoria!);
                 HttpContext.Session.SetString("Token", resp?.Dato?.Token!);
 
-                if ((bool)(resp?.Dato?.EsTemporal!))
-                    return RedirectToAction("CambiarContrasenna", "Home");
-                else
-                {
-                    HttpContext.Session.SetString("Login", "true");
-                    return RedirectToAction("PantallaInicio", "Home");
-                }
+                HttpContext.Session.SetString("Login", "true");
+                return RedirectToAction("PantallaInicio", "Home");
             }
             else
             {
